@@ -1,4 +1,5 @@
 #include QMK_KEYBOARD_H
+#include "features/achordion.h"
 
 #define LCTL_KA LCTL_T(KC_A)
 #define LALT_KR LALT_T(KC_R)
@@ -13,6 +14,11 @@
 #define TMUX_PRE C(KC_A)
 #define VIM_WIN_PRE C(KC_W)
 
+#define TAB_NUM LT(_NUM, KC_TAB)
+#define BSPC_NAV LT(_NAV, KC_BSPC)
+#define SPC_SYM LT(_SYM, KC_SPC)
+#define ENT_FN LT(_FN, KC_ENT)
+
 enum layers {
     _COLEMAK = 0,
     _QWERTY,
@@ -23,20 +29,20 @@ enum layers {
 };
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
-//    ┌──────┬─────────┬─────────┬─────────┬─────────┬───────────────┐                                                   ┌──────┬─────────┬─────────┬─────────┬─────────┬──────┐
-//    │  `   │    q    │    w    │    f    │    p    │       b       │                                                   │  j   │    l    │    u    │    y    │    '    │ bspc │
-//    ├──────┼─────────┼─────────┼─────────┼─────────┼───────────────┤                                                   ├──────┼─────────┼─────────┼─────────┼─────────┼──────┤
-//    │ esc  │ LCTL_KA │ LALT_KR │ LGUI_KS │ LSFT_KT │       g       │                                                   │  m   │ LSFT_KN │ LGUI_KE │ LALT_KI │ LCTL_KO │  ;   │
-//    ├──────┼─────────┼─────────┼─────────┼─────────┼───────────────┤                                                   ├──────┼─────────┼─────────┼─────────┼─────────┼──────┤
-//    │ lsft │    z    │    x    │    c    │    d    │       v       │                                                   │  k   │    h    │    ,    │    .    │    /    │ rsft │
-//    └──────┴─────────┴─────────┴─────────┼─────────┼───────────────┼────────────────┐   ┌───────────────┬──────────────┼──────┼─────────┴─────────┴─────────┴─────────┴──────┘
-//                                         │  lgui   │ LT(_NUM, tab) │ LT(_NAV, bspc) │   │ LT(_SYM, spc) │ LT(_FN, ent) │ ralt │
-//                                         └─────────┴───────────────┴────────────────┘   └───────────────┴──────────────┴──────┘
+//    ┌──────┬─────────┬─────────┬─────────┬─────────┬─────────┐                                 ┌──────┬─────────┬─────────┬─────────┬─────────┬──────┐
+//    │  `   │    q    │    w    │    f    │    p    │    b    │                                 │  j   │    l    │    u    │    y    │    '    │ bspc │
+//    ├──────┼─────────┼─────────┼─────────┼─────────┼─────────┤                                 ├──────┼─────────┼─────────┼─────────┼─────────┼──────┤
+//    │ esc  │ LCTL_KA │ LALT_KR │ LGUI_KS │ LSFT_KT │    g    │                                 │  m   │ LSFT_KN │ LGUI_KE │ LALT_KI │ LCTL_KO │  ;   │
+//    ├──────┼─────────┼─────────┼─────────┼─────────┼─────────┤                                 ├──────┼─────────┼─────────┼─────────┼─────────┼──────┤
+//    │ lsft │    z    │    x    │    c    │    d    │    v    │                                 │  k   │    h    │    ,    │    .    │    /    │ rsft │
+//    └──────┴─────────┴─────────┴─────────┼─────────┼─────────┼──────────┐   ┌─────────┬────────┼──────┼─────────┴─────────┴─────────┴─────────┴──────┘
+//                                         │  lgui   │ TAB_NUM │ BSPC_NAV │   │ SPC_SYM │ ENT_FN │ ralt │
+//                                         └─────────┴─────────┴──────────┘   └─────────┴────────┴──────┘
 [_COLEMAK] = LAYOUT_split_3x6_3(
-  KC_GRV  , KC_Q    , KC_W    , KC_F    , KC_P    , KC_B             ,                                                              KC_J    , KC_L    , KC_U    , KC_Y    , KC_QUOT , KC_BSPC,
-  KC_ESC  , LCTL_KA , LALT_KR , LGUI_KS , LSFT_KT , KC_G             ,                                                              KC_M    , LSFT_KN , LGUI_KE , LALT_KI , LCTL_KO , KC_SCLN,
-  KC_LSFT , KC_Z    , KC_X    , KC_C    , KC_D    , KC_V             ,                                                              KC_K    , KC_H    , KC_COMM , KC_DOT  , KC_SLSH , KC_RSFT,
-                                          KC_LGUI , LT(_NUM, KC_TAB) , LT(_NAV, KC_BSPC) ,     LT(_SYM, KC_SPC) , LT(_FN, KC_ENT) , KC_RALT
+  KC_GRV  , KC_Q    , KC_W    , KC_F    , KC_P    , KC_B    ,                                   KC_J    , KC_L    , KC_U    , KC_Y    , KC_QUOT , KC_BSPC,
+  KC_ESC  , LCTL_KA , LALT_KR , LGUI_KS , LSFT_KT , KC_G    ,                                   KC_M    , LSFT_KN , LGUI_KE , LALT_KI , LCTL_KO , KC_SCLN,
+  KC_LSFT , KC_Z    , KC_X    , KC_C    , KC_D    , KC_V    ,                                   KC_K    , KC_H    , KC_COMM , KC_DOT  , KC_SLSH , KC_RSFT,
+                                          KC_LGUI , TAB_NUM , BSPC_NAV ,     SPC_SYM , ENT_FN , KC_RALT
 ),
 
 //    ┌──────┬───┬───┬───┬──────┬───────┐                       ┌──────┬───┬───┬───┬───┬──────┐
@@ -87,20 +93,20 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                           KC_PERC , KC_COLN , KC_BSLS ,     XXXXXXX , _______ , XXXXXXX
 ),
 
-//    ┌─────────┬─────────┬─────────┬─────────┬──────┬────┐                     ┌──────┬──────┬──────┬──────┬──────┬────┐
-//    │ QK_BOOT │   no    │   no    │   no    │  no  │ no │                     │  no  │  no  │  no  │  no  │  no  │ no │
-//    ├─────────┼─────────┼─────────┼─────────┼──────┼────┤                     ├──────┼──────┼──────┼──────┼──────┼────┤
-//    │ CW_TOGG │  lctl   │  lalt   │  lgui   │ lsft │ no │                     │ left │ down │  up  │ rght │ C(w) │ no │
-//    ├─────────┼─────────┼─────────┼─────────┼──────┼────┤                     ├──────┼──────┼──────┼──────┼──────┼────┤
-//    │ RGB_MOD │ RGB_HUD │ RGB_SAD │ RGB_VAD │  no  │ no │                     │  no  │ home │ pgdn │ pgup │ end  │ no │
-//    └─────────┴─────────┴─────────┴─────────┼──────┼────┼─────┐   ┌─────┬─────┼──────┼──────┴──────┴──────┴──────┴────┘
-//                                            │  no  │ no │     │   │ ent │     │ ralt │
-//                                            └──────┴────┴─────┘   └─────┴─────┴──────┘
+//    ┌─────────┬──────┬──────┬──────┬──────┬────┐                     ┌──────┬──────┬──────┬──────┬──────┬────┐
+//    │ QK_BOOT │  no  │  no  │  no  │  no  │ no │                     │  no  │  no  │  no  │  no  │  no  │ no │
+//    ├─────────┼──────┼──────┼──────┼──────┼────┤                     ├──────┼──────┼──────┼──────┼──────┼────┤
+//    │ CW_TOGG │ lctl │ lalt │ lgui │ lsft │ no │                     │ left │ down │  up  │ rght │ C(w) │ no │
+//    ├─────────┼──────┼──────┼──────┼──────┼────┤                     ├──────┼──────┼──────┼──────┼──────┼────┤
+//    │ C(S(z)) │ C(z) │ C(x) │ C(c) │ C(v) │ no │                     │  no  │ home │ pgdn │ pgup │ end  │ no │
+//    └─────────┴──────┴──────┴──────┼──────┼────┼─────┐   ┌─────┬─────┼──────┼──────┴──────┴──────┴──────┴────┘
+//                                   │  no  │ no │     │   │ ent │     │ ralt │
+//                                   └──────┴────┴─────┘   └─────┴─────┴──────┘
 [_NAV] = LAYOUT_split_3x6_3(
-  QK_BOOT , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX ,                                  XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX  , XXXXXXX , XXXXXXX,
-  CW_TOGG , KC_LCTL , KC_LALT , KC_LGUI , KC_LSFT , XXXXXXX ,                                  KC_LEFT , KC_DOWN , KC_UP   , KC_RIGHT , C(KC_W) , XXXXXXX,
-  RGB_MOD , RGB_HUD , RGB_SAD , RGB_VAD , XXXXXXX , XXXXXXX ,                                  XXXXXXX , KC_HOME , KC_PGDN , KC_PGUP  , KC_END  , XXXXXXX,
-                                          XXXXXXX , XXXXXXX , _______ ,     KC_ENT , _______ , KC_RALT
+  QK_BOOT    , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX ,                                  XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX  , XXXXXXX , XXXXXXX,
+  CW_TOGG    , KC_LCTL , KC_LALT , KC_LGUI , KC_LSFT , XXXXXXX ,                                  KC_LEFT , KC_DOWN , KC_UP   , KC_RIGHT , C(KC_W) , XXXXXXX,
+  C(S(KC_Z)) , C(KC_Z) , C(KC_X) , C(KC_C) , C(KC_V) , XXXXXXX ,                                  XXXXXXX , KC_HOME , KC_PGDN , KC_PGUP  , KC_END  , XXXXXXX,
+                                             XXXXXXX , XXXXXXX , _______ ,     KC_ENT , _______ , KC_RALT
 ),
 
 //    ┌────┬──────┬──────┬──────┬──────┬─────┐                     ┌──────┬────┬────┬────┬─────┬─────┐
@@ -119,3 +125,32 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                           KC_LGUI , _______ , KC_SPC ,     KC_ENT , _______ , KC_RALT
 )
 };
+
+bool process_record_user(uint16_t keycode, keyrecord_t* record) {
+  if (!process_achordion(keycode, record)) { return false; }
+  // Your macros ...
+
+  return true;
+}
+
+void matrix_scan_user(void) {
+  achordion_task();
+}
+
+bool achordion_chord(uint16_t tap_hold_keycode,
+                     keyrecord_t* tap_hold_record,
+                     uint16_t other_keycode,
+                     keyrecord_t* other_record) {
+  // Exceptionally consider the following chords as holds, even though they
+  // are on the same hand in Dvorak.
+  switch (tap_hold_keycode) {
+    case TAB_NUM:
+    case BSPC_NAV:
+    case SPC_SYM:
+    case ENT_FN:
+        return true;
+  }
+
+  // Otherwise, follow the opposite hands rule.
+  return achordion_opposite_hands(tap_hold_record, other_record);
+}

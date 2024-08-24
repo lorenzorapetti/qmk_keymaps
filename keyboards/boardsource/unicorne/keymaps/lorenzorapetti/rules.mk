@@ -1,4 +1,4 @@
 CAPS_WORD_ENABLE = yes
-DEFERRED_EXEC_ENABLE = yes
 POINTING_DEVICE_ENABLE = no
-TRI_LAYER_ENABLE = yes
+
+SRC += features/achordion.c
