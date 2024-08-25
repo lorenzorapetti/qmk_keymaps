@@ -28,6 +28,14 @@ enum layers {
     _FN
 };
 
+enum custom_keycodes {
+    COPY = SAFE_RANGE,
+    PASTE,
+    CUT,
+    UNDO,
+    REDO
+};
+
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 //    ┌──────┬─────────┬─────────┬─────────┬─────────┬─────────┐                                 ┌──────┬─────────┬─────────┬─────────┬─────────┬──────┐
 //    │  `   │    q    │    w    │    f    │    p    │    b    │                                 │  j   │    l    │    u    │    y    │    '    │ bspc │
@@ -93,20 +101,20 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                           KC_PERC , KC_COLN , KC_BSLS ,     XXXXXXX , _______ , XXXXXXX
 ),
 
-//    ┌─────────┬──────┬──────┬──────┬──────┬────┐                     ┌──────┬──────┬──────┬──────┬──────┬────┐
-//    │ QK_BOOT │  no  │  no  │  no  │  no  │ no │                     │  no  │  no  │  no  │  no  │  no  │ no │
-//    ├─────────┼──────┼──────┼──────┼──────┼────┤                     ├──────┼──────┼──────┼──────┼──────┼────┤
-//    │ CW_TOGG │ lctl │ lalt │ lgui │ lsft │ no │                     │ left │ down │  up  │ rght │ C(w) │ no │
-//    ├─────────┼──────┼──────┼──────┼──────┼────┤                     ├──────┼──────┼──────┼──────┼──────┼────┤
-//    │ C(S(z)) │ C(z) │ C(x) │ C(c) │ C(v) │ no │                     │  no  │ home │ pgdn │ pgup │ end  │ no │
-//    └─────────┴──────┴──────┴──────┼──────┼────┼─────┐   ┌─────┬─────┼──────┼──────┴──────┴──────┴──────┴────┘
-//                                   │  no  │ no │     │   │ ent │     │ ralt │
-//                                   └──────┴────┴─────┘   └─────┴─────┴──────┘
+//    ┌─────────┬──────┬──────┬──────┬──────┬───────┐                     ┌──────┬──────┬──────┬──────┬──────┬────┐
+//    │ QK_BOOT │  no  │  no  │ REDO │ UNDO │  CUT  │                     │  no  │  no  │  no  │  no  │  no  │ no │
+//    ├─────────┼──────┼──────┼──────┼──────┼───────┤                     ├──────┼──────┼──────┼──────┼──────┼────┤
+//    │ CW_TOGG │ lctl │ lalt │ lgui │ lsft │ COPY  │                     │ left │ down │  up  │ rght │ C(w) │ no │
+//    ├─────────┼──────┼──────┼──────┼──────┼───────┤                     ├──────┼──────┼──────┼──────┼──────┼────┤
+//    │   no    │  no  │  no  │  no  │  no  │ PASTE │                     │  no  │ home │ pgdn │ pgup │ end  │ no │
+//    └─────────┴──────┴──────┴──────┼──────┼───────┼─────┐   ┌─────┬─────┼──────┼──────┴──────┴──────┴──────┴────┘
+//                                   │  no  │  no   │     │   │ ent │     │ ralt │
+//                                   └──────┴───────┴─────┘   └─────┴─────┴──────┘
 [_NAV] = LAYOUT_split_3x6_3(
-  QK_BOOT    , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX ,                                  XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX  , XXXXXXX , XXXXXXX,
-  CW_TOGG    , KC_LCTL , KC_LALT , KC_LGUI , KC_LSFT , XXXXXXX ,                                  KC_LEFT , KC_DOWN , KC_UP   , KC_RIGHT , C(KC_W) , XXXXXXX,
-  C(S(KC_Z)) , C(KC_Z) , C(KC_X) , C(KC_C) , C(KC_V) , XXXXXXX ,                                  XXXXXXX , KC_HOME , KC_PGDN , KC_PGUP  , KC_END  , XXXXXXX,
-                                             XXXXXXX , XXXXXXX , _______ ,     KC_ENT , _______ , KC_RALT
+  QK_BOOT , XXXXXXX , XXXXXXX , REDO    , UNDO    , CUT     ,                                  XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX  , XXXXXXX , XXXXXXX,
+  CW_TOGG , KC_LCTL , KC_LALT , KC_LGUI , KC_LSFT , COPY    ,                                  KC_LEFT , KC_DOWN , KC_UP   , KC_RIGHT , C(KC_W) , XXXXXXX,
+  XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , PASTE   ,                                  XXXXXXX , KC_HOME , KC_PGDN , KC_PGUP  , KC_END  , XXXXXXX,
+                                          XXXXXXX , XXXXXXX , _______ ,     KC_ENT , _______ , KC_RALT
 ),
 
 //    ┌────┬──────┬──────┬──────┬──────┬─────┐                     ┌──────┬────┬────┬────┬─────┬─────┐
@@ -128,7 +136,51 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 bool process_record_user(uint16_t keycode, keyrecord_t* record) {
   if (!process_achordion(keycode, record)) { return false; }
-  // Your macros ...
+
+    os_variant_t detected_os = detected_host_os();
+    bool use_ctrl = true;
+
+    if (detected_os == OS_MACOS || detected_os == OS_IOS) {
+        use_ctrl = false;
+    }
+
+    switch (keycode) {
+        case COPY:
+            if (record->event.pressed) {
+                register_code16(use_ctrl ? C(KC_C) : G(KC_C));
+            } else {
+                unregister_code16(use_ctrl ? C(KC_C) : G(KC_C));
+            }
+            return false;
+        case PASTE:
+            if (record->event.pressed) {
+                register_code16(use_ctrl ? C(KC_V) : G(KC_V));
+            } else {
+                unregister_code16(use_ctrl ? C(KC_V) : G(KC_V));
+            }
+            return false;
+        case CUT:
+            if (record->event.pressed) {
+                register_code16(use_ctrl ? C(KC_X) : G(KC_X));
+            } else {
+                unregister_code16(use_ctrl ? C(KC_X) : G(KC_X));
+            }
+            return false;
+        case UNDO:
+            if (record->event.pressed) {
+                register_code16(use_ctrl ? C(KC_Z) : G(KC_Z));
+            } else {
+                unregister_code16(use_ctrl ? C(KC_Z) : G(KC_Z));
+            }
+            return false;
+        case REDO:
+            if (record->event.pressed) {
+                register_code16(use_ctrl ? C(S(KC_Z)) : G(S(KC_Z)));
+            } else {
+                unregister_code16(use_ctrl ? C(S(KC_Z)) : G(S(KC_Z)));
+            }
+            return false;
+    }
 
   return true;
 }
@@ -153,4 +205,27 @@ bool achordion_chord(uint16_t tap_hold_keycode,
 
   // Otherwise, follow the opposite hands rule.
   return achordion_opposite_hands(tap_hold_record, other_record);
+}
+
+bool process_detected_host_os_kb(os_variant_t detected_os) {
+    if (!process_detected_host_os_user(detected_os)) {
+        return false;
+    }
+    switch (detected_os) {
+        case OS_MACOS:
+        case OS_IOS:
+            rgb_matrix_set_color_all(RGB_WHITE);
+            break;
+        case OS_WINDOWS:
+            rgb_matrix_set_color_all(RGB_BLUE);
+            break;
+        case OS_LINUX:
+            rgb_matrix_set_color_all(RGB_ORANGE);
+            break;
+        case OS_UNSURE:
+            rgb_matrix_set_color_all(RGB_RED);
+            break;
+    }
+
+    return true;
 }
