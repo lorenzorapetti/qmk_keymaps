@@ -1,5 +1,6 @@
 CAPS_WORD_ENABLE = yes
 POINTING_DEVICE_ENABLE = no
 OS_DETECTION_ENABLE = yes
+UNICODE_COMMON = yes
 
 SRC += features/achordion.c

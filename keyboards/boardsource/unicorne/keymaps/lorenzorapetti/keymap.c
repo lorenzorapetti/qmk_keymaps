@@ -18,6 +18,28 @@
 #define BSPC_NAV LT(_NAV, KC_BSPC)
 #define SPC_SYM LT(_SYM, KC_SPC)
 #define ENT_FN LT(_FN, KC_ENT)
+#define ESC_WLD LT(_WORLD, KC_ESC)
+
+#define A_GRAVE UC(0x00E0)
+#define A_ACUTE UC(0x00E1)
+#define A_GRAVEU UC(0x00C0)
+#define A_ACUTEU UC(0x00C1)
+#define E_GRAVE UC(0x00E8)
+#define E_ACUTE UC(0x00E9)
+#define E_GRAVEU UC(0x00C8)
+#define E_ACUTEU UC(0x00C9)
+#define I_GRAVE UC(0x00EC)
+#define I_ACUTE UC(0x00ED)
+#define I_GRAVEU UC(0x00CC)
+#define I_ACUTEU UC(0x00CD)
+#define O_GRAVE UC(0x00F2)
+#define O_ACUTE UC(0x00F3)
+#define O_GRAVEU UC(0x00D2)
+#define O_ACUTEU UC(0x00D3)
+#define U_GRAVE UC(0x00F9)
+#define U_ACUTE UC(0x00FA)
+#define U_GRAVEU UC(0x00D9)
+#define U_ACUTEU UC(0x00DA)
 
 enum layers {
     _COLEMAK = 0,
@@ -25,7 +47,8 @@ enum layers {
     _NUM,
     _SYM,
     _NAV,
-    _FN
+    _FN,
+    _WORLD
 };
 
 enum custom_keycodes {
@@ -33,22 +56,24 @@ enum custom_keycodes {
     PASTE,
     CUT,
     UNDO,
-    REDO
+    REDO,
+    FIND,
+    SEL_ALL
 };
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
-//    ┌──────┬─────────┬─────────┬─────────┬─────────┬─────────┐                                 ┌──────┬─────────┬─────────┬─────────┬─────────┬──────┐
-//    │  `   │    q    │    w    │    f    │    p    │    b    │                                 │  j   │    l    │    u    │    y    │    '    │ bspc │
-//    ├──────┼─────────┼─────────┼─────────┼─────────┼─────────┤                                 ├──────┼─────────┼─────────┼─────────┼─────────┼──────┤
-//    │ esc  │ LCTL_KA │ LALT_KR │ LGUI_KS │ LSFT_KT │    g    │                                 │  m   │ LSFT_KN │ LGUI_KE │ LALT_KI │ LCTL_KO │  ;   │
-//    ├──────┼─────────┼─────────┼─────────┼─────────┼─────────┤                                 ├──────┼─────────┼─────────┼─────────┼─────────┼──────┤
-//    │ lsft │    z    │    x    │    c    │    d    │    v    │                                 │  k   │    h    │    ,    │    .    │    /    │ rsft │
-//    └──────┴─────────┴─────────┴─────────┼─────────┼─────────┼──────────┐   ┌─────────┬────────┼──────┼─────────┴─────────┴─────────┴─────────┴──────┘
-//                                         │  lgui   │ TAB_NUM │ BSPC_NAV │   │ SPC_SYM │ ENT_FN │ ralt │
-//                                         └─────────┴─────────┴──────────┘   └─────────┴────────┴──────┘
+//    ┌─────────┬─────────┬─────────┬─────────┬─────────┬─────────┐                                 ┌──────┬─────────┬─────────┬─────────┬─────────┬──────┐
+//    │    `    │    q    │    w    │    f    │    p    │    b    │                                 │  j   │    l    │    u    │    y    │    '    │ bspc │
+//    ├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤                                 ├──────┼─────────┼─────────┼─────────┼─────────┼──────┤
+//    │ ESC_WLD │ LCTL_KA │ LALT_KR │ LGUI_KS │ LSFT_KT │    g    │                                 │  m   │ LSFT_KN │ LGUI_KE │ LALT_KI │ LCTL_KO │  ;   │
+//    ├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤                                 ├──────┼─────────┼─────────┼─────────┼─────────┼──────┤
+//    │  lsft   │    z    │    x    │    c    │    d    │    v    │                                 │  k   │    h    │    ,    │    .    │    /    │ rsft │
+//    └─────────┴─────────┴─────────┴─────────┼─────────┼─────────┼──────────┐   ┌─────────┬────────┼──────┼─────────┴─────────┴─────────┴─────────┴──────┘
+//                                            │  lgui   │ TAB_NUM │ BSPC_NAV │   │ SPC_SYM │ ENT_FN │ ralt │
+//                                            └─────────┴─────────┴──────────┘   └─────────┴────────┴──────┘
 [_COLEMAK] = LAYOUT_split_3x6_3(
   KC_GRV  , KC_Q    , KC_W    , KC_F    , KC_P    , KC_B    ,                                   KC_J    , KC_L    , KC_U    , KC_Y    , KC_QUOT , KC_BSPC,
-  KC_ESC  , LCTL_KA , LALT_KR , LGUI_KS , LSFT_KT , KC_G    ,                                   KC_M    , LSFT_KN , LGUI_KE , LALT_KI , LCTL_KO , KC_SCLN,
+  ESC_WLD , LCTL_KA , LALT_KR , LGUI_KS , LSFT_KT , KC_G    ,                                   KC_M    , LSFT_KN , LGUI_KE , LALT_KI , LCTL_KO , KC_SCLN,
   KC_LSFT , KC_Z    , KC_X    , KC_C    , KC_D    , KC_V    ,                                   KC_K    , KC_H    , KC_COMM , KC_DOT  , KC_SLSH , KC_RSFT,
                                           KC_LGUI , TAB_NUM , BSPC_NAV ,     SPC_SYM , ENT_FN , KC_RALT
 ),
@@ -101,19 +126,19 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                           KC_PERC , KC_COLN , KC_BSLS ,     XXXXXXX , _______ , XXXXXXX
 ),
 
-//    ┌─────────┬──────┬──────┬──────┬──────┬───────┐                     ┌──────┬──────┬──────┬──────┬──────┬────┐
-//    │ QK_BOOT │  no  │  no  │ REDO │ UNDO │  CUT  │                     │  no  │  no  │  no  │  no  │  no  │ no │
-//    ├─────────┼──────┼──────┼──────┼──────┼───────┤                     ├──────┼──────┼──────┼──────┼──────┼────┤
-//    │ CW_TOGG │ lctl │ lalt │ lgui │ lsft │ COPY  │                     │ left │ down │  up  │ rght │ C(w) │ no │
-//    ├─────────┼──────┼──────┼──────┼──────┼───────┤                     ├──────┼──────┼──────┼──────┼──────┼────┤
-//    │   no    │  no  │  no  │  no  │  no  │ PASTE │                     │  no  │ home │ pgdn │ pgup │ end  │ no │
-//    └─────────┴──────┴──────┴──────┼──────┼───────┼─────┐   ┌─────┬─────┼──────┼──────┴──────┴──────┴──────┴────┘
-//                                   │  no  │  no   │     │   │ ent │     │ ralt │
-//                                   └──────┴───────┴─────┘   └─────┴─────┴──────┘
+//    ┌─────────┬─────────┬──────┬──────┬──────┬───────┐                     ┌──────┬──────┬──────┬──────┬──────┬────┐
+//    │ QK_BOOT │   no    │  no  │ REDO │ UNDO │  CUT  │                     │  no  │  no  │  no  │  no  │  no  │ no │
+//    ├─────────┼─────────┼──────┼──────┼──────┼───────┤                     ├──────┼──────┼──────┼──────┼──────┼────┤
+//    │ CW_TOGG │  lctl   │ lalt │ lgui │ lsft │ COPY  │                     │ left │ down │  up  │ rght │ C(w) │ no │
+//    ├─────────┼─────────┼──────┼──────┼──────┼───────┤                     ├──────┼──────┼──────┼──────┼──────┼────┤
+//    │   no    │ SEL_ALL │  no  │  no  │ FIND │ PASTE │                     │  no  │ home │ pgdn │ pgup │ end  │ no │
+//    └─────────┴─────────┴──────┴──────┼──────┼───────┼─────┐   ┌─────┬─────┼──────┼──────┴──────┴──────┴──────┴────┘
+//                                      │  no  │  no   │     │   │ ent │     │ ralt │
+//                                      └──────┴───────┴─────┘   └─────┴─────┴──────┘
 [_NAV] = LAYOUT_split_3x6_3(
   QK_BOOT , XXXXXXX , XXXXXXX , REDO    , UNDO    , CUT     ,                                  XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX  , XXXXXXX , XXXXXXX,
   CW_TOGG , KC_LCTL , KC_LALT , KC_LGUI , KC_LSFT , COPY    ,                                  KC_LEFT , KC_DOWN , KC_UP   , KC_RIGHT , C(KC_W) , XXXXXXX,
-  XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , PASTE   ,                                  XXXXXXX , KC_HOME , KC_PGDN , KC_PGUP  , KC_END  , XXXXXXX,
+  XXXXXXX , SEL_ALL , XXXXXXX , XXXXXXX , FIND    , PASTE   ,                                  XXXXXXX , KC_HOME , KC_PGDN , KC_PGUP  , KC_END  , XXXXXXX,
                                           XXXXXXX , XXXXXXX , _______ ,     KC_ENT , _______ , KC_RALT
 ),
 
@@ -131,8 +156,37 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   XXXXXXX , KC_LCTL , KC_LALT , KC_LGUI , KC_LSFT , XXXXXXX ,                                 KC_VOLU , KC_F4 , KC_F5 , KC_F6 , KC_F11 , KC_F14,
   XXXXXXX , KC_BRID , XXXXXXX , XXXXXXX , KC_BRIU , XXXXXXX ,                                 KC_VOLD , KC_F1 , KC_F2 , KC_F3 , KC_F12 , KC_F15,
                                           KC_LGUI , _______ , KC_SPC ,     KC_ENT , _______ , KC_RALT
+),
+
+//    ┌─────┬────┬────┬────┬────┬────┐                      ┌─────────┬─────────┬─────────┬─────────┬────┬────┐
+//    │ no  │ no │ no │ no │ no │ no │                      │   no    │   no    │   no    │   no    │ no │ no │
+//    ├─────┼────┼────┼────┼────┼────┤                      ├─────────┼─────────┼─────────┼─────────┼────┼────┤
+//    │     │ no │ no │ no │ no │ no │                      │ A_GRAVE │ E_GRAVE │ I_GRAVE │ O_GRAVE │ no │ no │
+//    ├─────┼────┼────┼────┼────┼────┤                      ├─────────┼─────────┼─────────┼─────────┼────┼────┤
+//    │ no  │ no │ no │ no │ no │ no │                      │   no    │   no    │   no    │   no    │ no │ no │
+//    └─────┴────┴────┴────┼────┼────┼──────┐   ┌─────┬─────┼─────────┼─────────┴─────────┴─────────┴────┴────┘
+//                         │ no │ no │ lgui │   │ ent │     │  ralt   │
+//                         └────┴────┴──────┘   └─────┴─────┴─────────┘
+[_WORLD] = LAYOUT_split_3x6_3(
+  XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX ,                                  XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX,
+  _______ , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX ,                                  A_GRAVE , E_GRAVE , I_GRAVE , O_GRAVE , XXXXXXX , XXXXXXX,
+  XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX ,                                  XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX,
+                                          XXXXXXX , XXXXXXX , KC_LGUI ,     KC_ENT , _______ , KC_RALT
 )
 };
+
+uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
+    switch (keycode) {
+        case ESC_WLD:
+        case TAB_NUM:
+        case BSPC_NAV:
+        case SPC_SYM:
+        case ENT_FN:
+            return 120;
+        default:
+            return TAPPING_TERM;
+    }
+}
 
 bool process_record_user(uint16_t keycode, keyrecord_t* record) {
   if (!process_achordion(keycode, record)) { return false; }
@@ -178,6 +232,20 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record) {
                 register_code16(use_ctrl ? C(S(KC_Z)) : G(S(KC_Z)));
             } else {
                 unregister_code16(use_ctrl ? C(S(KC_Z)) : G(S(KC_Z)));
+            }
+            return false;
+        case FIND:
+            if (record->event.pressed) {
+                register_code16(use_ctrl ? C(KC_F) : G(KC_F));
+            } else {
+                unregister_code16(use_ctrl ? C(KC_F) : G(KC_F));
+            }
+            return false;
+        case SEL_ALL:
+            if (record->event.pressed) {
+                register_code16(use_ctrl ? C(KC_A) : G(KC_A));
+            } else {
+                unregister_code16(use_ctrl ? C(KC_A) : G(KC_A));
             }
             return false;
     }
