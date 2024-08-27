@@ -128,7 +128,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 ),
 
 //    ┌─────────┬─────────┬──────┬──────┬────────────┬───────┐                     ┌──────┬──────┬──────┬──────┬──────┬────┐
-//    │ QK_BOOT │   no    │  no  │ REDO │    UNDO    │  CUT  │                     │  no  │  no  │  no  │  no  │  no  │ no │
+//    │ QK_BOOT │   no    │  no  │ REDO │    UNDO    │  CUT  │                     │  no  │ bspc │ tab  │ spc  │ ent  │ no │
 //    ├─────────┼─────────┼──────┼──────┼────────────┼───────┤                     ├──────┼──────┼──────┼──────┼──────┼────┤
 //    │ CW_TOGG │  lctl   │ lalt │ lgui │    lsft    │ COPY  │                     │ left │ down │  up  │ rght │ C(w) │ no │
 //    ├─────────┼─────────┼──────┼──────┼────────────┼───────┤                     ├──────┼──────┼──────┼──────┼──────┼────┤
@@ -137,7 +137,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 //                                      │     no     │  no   │     │   │ ent │     │ ralt │
 //                                      └────────────┴───────┴─────┘   └─────┴─────┴──────┘
 [_NAV] = LAYOUT_split_3x6_3(
-  QK_BOOT , XXXXXXX , XXXXXXX , REDO    , UNDO       , CUT     ,                                  XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX  , XXXXXXX , XXXXXXX,
+  QK_BOOT , XXXXXXX , XXXXXXX , REDO    , UNDO       , CUT     ,                                  XXXXXXX , KC_BSPC , KC_TAB  , KC_SPC   , KC_ENT  , XXXXXXX,
   CW_TOGG , KC_LCTL , KC_LALT , KC_LGUI , KC_LSFT    , COPY    ,                                  KC_LEFT , KC_DOWN , KC_UP   , KC_RIGHT , C(KC_W) , XXXXXXX,
   XXXXXXX , SEL_ALL , XXXXXXX , FIND    , SAFE_PASTE , PASTE   ,                                  XXXXXXX , KC_HOME , KC_PGDN , KC_PGUP  , KC_END  , XXXXXXX,
                                           XXXXXXX    , XXXXXXX , _______ ,     KC_ENT , _______ , KC_RALT
