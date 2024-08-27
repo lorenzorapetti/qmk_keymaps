@@ -54,6 +54,7 @@ enum layers {
 enum custom_keycodes {
     COPY = SAFE_RANGE,
     PASTE,
+    SAFE_PASTE,
     CUT,
     UNDO,
     REDO,
@@ -126,20 +127,20 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                           KC_PERC , KC_COLN , KC_BSLS ,     XXXXXXX , _______ , XXXXXXX
 ),
 
-//    ┌─────────┬─────────┬──────┬──────┬──────┬───────┐                     ┌──────┬──────┬──────┬──────┬──────┬────┐
-//    │ QK_BOOT │   no    │  no  │ REDO │ UNDO │  CUT  │                     │  no  │  no  │  no  │  no  │  no  │ no │
-//    ├─────────┼─────────┼──────┼──────┼──────┼───────┤                     ├──────┼──────┼──────┼──────┼──────┼────┤
-//    │ CW_TOGG │  lctl   │ lalt │ lgui │ lsft │ COPY  │                     │ left │ down │  up  │ rght │ C(w) │ no │
-//    ├─────────┼─────────┼──────┼──────┼──────┼───────┤                     ├──────┼──────┼──────┼──────┼──────┼────┤
-//    │   no    │ SEL_ALL │  no  │  no  │ FIND │ PASTE │                     │  no  │ home │ pgdn │ pgup │ end  │ no │
-//    └─────────┴─────────┴──────┴──────┼──────┼───────┼─────┐   ┌─────┬─────┼──────┼──────┴──────┴──────┴──────┴────┘
-//                                      │  no  │  no   │     │   │ ent │     │ ralt │
-//                                      └──────┴───────┴─────┘   └─────┴─────┴──────┘
+//    ┌─────────┬─────────┬──────┬──────┬────────────┬───────┐                     ┌──────┬──────┬──────┬──────┬──────┬────┐
+//    │ QK_BOOT │   no    │  no  │ REDO │    UNDO    │  CUT  │                     │  no  │  no  │  no  │  no  │  no  │ no │
+//    ├─────────┼─────────┼──────┼──────┼────────────┼───────┤                     ├──────┼──────┼──────┼──────┼──────┼────┤
+//    │ CW_TOGG │  lctl   │ lalt │ lgui │    lsft    │ COPY  │                     │ left │ down │  up  │ rght │ C(w) │ no │
+//    ├─────────┼─────────┼──────┼──────┼────────────┼───────┤                     ├──────┼──────┼──────┼──────┼──────┼────┤
+//    │   no    │ SEL_ALL │  no  │ FIND │ SAFE_PASTE │ PASTE │                     │  no  │ home │ pgdn │ pgup │ end  │ no │
+//    └─────────┴─────────┴──────┴──────┼────────────┼───────┼─────┐   ┌─────┬─────┼──────┼──────┴──────┴──────┴──────┴────┘
+//                                      │     no     │  no   │     │   │ ent │     │ ralt │
+//                                      └────────────┴───────┴─────┘   └─────┴─────┴──────┘
 [_NAV] = LAYOUT_split_3x6_3(
-  QK_BOOT , XXXXXXX , XXXXXXX , REDO    , UNDO    , CUT     ,                                  XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX  , XXXXXXX , XXXXXXX,
-  CW_TOGG , KC_LCTL , KC_LALT , KC_LGUI , KC_LSFT , COPY    ,                                  KC_LEFT , KC_DOWN , KC_UP   , KC_RIGHT , C(KC_W) , XXXXXXX,
-  XXXXXXX , SEL_ALL , XXXXXXX , XXXXXXX , FIND    , PASTE   ,                                  XXXXXXX , KC_HOME , KC_PGDN , KC_PGUP  , KC_END  , XXXXXXX,
-                                          XXXXXXX , XXXXXXX , _______ ,     KC_ENT , _______ , KC_RALT
+  QK_BOOT , XXXXXXX , XXXXXXX , REDO    , UNDO       , CUT     ,                                  XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX  , XXXXXXX , XXXXXXX,
+  CW_TOGG , KC_LCTL , KC_LALT , KC_LGUI , KC_LSFT    , COPY    ,                                  KC_LEFT , KC_DOWN , KC_UP   , KC_RIGHT , C(KC_W) , XXXXXXX,
+  XXXXXXX , SEL_ALL , XXXXXXX , FIND    , SAFE_PASTE , PASTE   ,                                  XXXXXXX , KC_HOME , KC_PGDN , KC_PGUP  , KC_END  , XXXXXXX,
+                                          XXXXXXX    , XXXXXXX , _______ ,     KC_ENT , _______ , KC_RALT
 ),
 
 //    ┌────┬──────┬──────┬──────┬──────┬─────┐                     ┌──────┬────┬────┬────┬─────┬─────┐
@@ -211,6 +212,13 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record) {
                 register_code16(use_ctrl ? C(KC_V) : G(KC_V));
             } else {
                 unregister_code16(use_ctrl ? C(KC_V) : G(KC_V));
+            }
+            return false;
+        case SAFE_PASTE:
+            if (record->event.pressed) {
+                register_code16(use_ctrl ? C(S(KC_V)) : G(S(KC_V)));
+            } else {
+                unregister_code16(use_ctrl ? C(S(KC_V)) : G(S(KC_V)));
             }
             return false;
         case CUT:
